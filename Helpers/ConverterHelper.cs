@@ -1,24 +1,24 @@
 ﻿using SuperShop.Data.Entities;
 using SuperShop.Models;
+using System;
 
 namespace SuperShop.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Product ToProduct(ProductViewModel productViewModel,
-            string filePath, bool isNew)
+        public Product ToProduct(ProductViewModel model, Guid imageId, bool isNew)
         {
             return new Product
             {
-                Id = isNew ? 0 : productViewModel.Id,
-                ImageUrl = filePath,
-                IsAvailable = productViewModel.IsAvailable,
-                LastPurchase = productViewModel.LastPurchase,
-                LastSale = productViewModel.LastSale,
-                Name = productViewModel.Name,
-                Price = productViewModel.Price,
-                Stock = productViewModel.Stock,
-                User = productViewModel.User
+                Id = isNew ? 0 : model.Id,
+                ImageId = imageId,
+                IsAvailable = model.IsAvailable,
+                LastPurchase = model.LastPurchase,
+                LastSale = model.LastSale,
+                Name = model.Name,
+                Price = model.Price,
+                Stock = model.Stock,
+                User = model.User
             };
         }
 
@@ -27,8 +27,7 @@ namespace SuperShop.Helpers
             return new ProductViewModel
             {
                 Id = product.Id,
-                ImageUrl = product.ImageUrl,
-                // ImageFile = product.ImageUrl,
+                ImageId = product.ImageId,
                 IsAvailable = product.IsAvailable,
                 LastPurchase = product.LastPurchase,
                 LastSale = product.LastSale,
