@@ -44,6 +44,10 @@ namespace SuperShop
 
             services.AddScoped<IUserHelper, UserHelper> ();
 
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+
+            services.AddScoped<IImageHelper, ImageHelper>();
+
             services.AddScoped<IProductRepository, ProductRepository>();
 
             //services.AddScoped<IRepository, Repository>();

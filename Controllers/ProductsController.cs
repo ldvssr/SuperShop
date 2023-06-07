@@ -1,10 +1,13 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SuperShop.Data;
 using SuperShop.Data.Entities;
 using SuperShop.Helpers;
+using SuperShop.Models;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SuperShop.Controllers
 {
@@ -12,13 +15,20 @@ namespace SuperShop.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IUserHelper _userHelper;
+        private readonly IConverterHelper _converterHelper;
+        private readonly IImageHelper _imageHelper;
 
         public ProductsController(
             IProductRepository productRepository,
-            IUserHelper userHelper)
+            IUserHelper userHelper,
+            IConverterHelper converterHelper,
+            IImageHelper imageHelper            
+            )            
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
+            _converterHelper = converterHelper;
+            _imageHelper = imageHelper;
         }
 
         // GET: Products
@@ -56,32 +66,58 @@ namespace SuperShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var path = string.Empty;
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+
+                    var guid = Guid.NewGuid().ToString();
+
+                    var file = $"{guid}.jpg";
+                    
+                    path = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot\\images\\products",
+                        file);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    path = $"~/images/products/{file}";
+                }
+
+                var product = _converterHelper.ToProduct(model, path, true);
+
                 //TODO: MODIFICAR PARA O USER QUE ESTIVER LOGADO
                 product.User = await _userHelper.GetUserByEmailAsync("ldvssr@icloud.com");
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(model);
         }
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // if (id == null) return NotFound();
+            if (id == null) return RedirectToAction(nameof(Index));
 
+            // var product = await _context.Products.FindAsync(id);
+            // var product = _repository.GetProduct(id.Value);
             var product = await _productRepository.GetByIdAsync(id.Value);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return View(product);
+
+            if (product == null) return RedirectToAction(nameof(Index));
+
+            var productViewModal =
+                _converterHelper.ToProductViewModel(product);
+
+            return View(productViewModal);
         }
 
         // POST: Products/Edit/5
@@ -89,24 +125,40 @@ namespace SuperShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(ProductViewModel model)
         {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
+            
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var path = model.ImageUrl;
+
+                    if(model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+
+                        var guid = Guid.NewGuid().ToString();
+
+                        var file = $"{guid}.jpg";
+
+                        path = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot\\images\\products",
+                            file);
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await model.ImageFile.CopyToAsync(stream);
+                        }
+                        path = $"~/images/products/{file}";
+                    }
+                    var product = _converterHelper.ToProduct(model, path, false);
                     //TODO: MODIFICAR PARA O USER QUE ESTIVER LOGADO
                     product.User = await _userHelper.GetUserByEmailAsync("ldvssr@icloud.com");
                     await _productRepository.UpdateAsync(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await _productRepository.ExistAsync(product.Id))
+                    if (!await _productRepository.ExistAsync(model.Id))
                     {
                         return NotFound();
                     }
@@ -117,7 +169,7 @@ namespace SuperShop.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(model);
         }
 
         // GET: Products/Delete/5
