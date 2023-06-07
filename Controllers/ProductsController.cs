@@ -74,22 +74,7 @@ namespace SuperShop.Controllers
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-
-                    var guid = Guid.NewGuid().ToString();
-
-                    var file = $"{guid}.jpg";
-                    
-                    path = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot\\images\\products",
-                        file);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/products/{file}";
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
                 }
 
                 var product = _converterHelper.ToProduct(model, path, true);
@@ -106,18 +91,17 @@ namespace SuperShop.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             // if (id == null) return NotFound();
-            if (id == null) return RedirectToAction(nameof(Index));
+            if (id == null) return NotFound();
 
             // var product = await _context.Products.FindAsync(id);
             // var product = _repository.GetProduct(id.Value);
             var product = await _productRepository.GetByIdAsync(id.Value);
 
-            if (product == null) return RedirectToAction(nameof(Index));
+            if (product == null) return NotFound();
 
-            var productViewModal =
-                _converterHelper.ToProductViewModel(product);
+            var model = _converterHelper.ToProductViewModel(product);
 
-            return View(productViewModal);
+            return View(model);
         }
 
         // POST: Products/Edit/5
@@ -136,25 +120,15 @@ namespace SuperShop.Controllers
 
                     if(model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-
-                        var guid = Guid.NewGuid().ToString();
-
-                        var file = $"{guid}.jpg";
-
-                        path = Path.Combine(
-                            Directory.GetCurrentDirectory(),
-                            "wwwroot\\images\\products",
-                            file);
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await model.ImageFile.CopyToAsync(stream);
-                        }
-                        path = $"~/images/products/{file}";
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
                     }
+
                     var product = _converterHelper.ToProduct(model, path, false);
+
                     //TODO: MODIFICAR PARA O USER QUE ESTIVER LOGADO
                     product.User = await _userHelper.GetUserByEmailAsync("ldvssr@icloud.com");
                     await _productRepository.UpdateAsync(product);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
