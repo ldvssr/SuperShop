@@ -10,20 +10,20 @@ namespace SuperShop.Helpers
         public async Task<string> UploadImageAsync(
             IFormFile imageFile, string folder)
         {
-            var guid = Guid.NewGuid().ToString();
-            var fileName = guid + ".jpg";
+            string guid = Guid.NewGuid().ToString();
+            string file = $"{guid}.jpg";
 
-            var filePath =
-                Directory.GetCurrentDirectory() +
-                $"\\wwwroot\\images\\{folder}\\{fileName}";
+            string path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                $"wwwroot\\images\\{folder}",
+                file);
 
-            await using var stream =
-                new FileStream(
-                    filePath, FileMode.Create, FileAccess.ReadWrite);
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
 
-            await imageFile.CopyToAsync(stream);
-
-            return $"~/images/{folder}/{fileName}";
+            return $"~/images/{folder}/{file}";
         }
     }
 }
