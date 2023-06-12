@@ -12,6 +12,11 @@
       "ignored": "true",
       "type": "mssql",
       "connectionId": "ConnectionStrings:NunoAzureConnection"
+    },
+    "mssql3": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:RubenAzureConnection"
     }
   }
 }
