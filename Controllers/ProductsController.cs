@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace SuperShop.Controllers
 {
-    [Authorize]
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
