@@ -44,14 +44,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             return View(product);
@@ -94,13 +94,13 @@ namespace SuperShop.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             // if (id == null) return NotFound();
-            if (id == null) return NotFound();
+            if (id == null) return new NotFoundViewResult("ProductNotFound");
 
             // var product = await _context.Products.FindAsync(id);
             // var product = _repository.GetProduct(id.Value);
             var product = await _productRepository.GetByIdAsync(id.Value);
 
-            if (product == null) return NotFound();
+            if (product == null) return new NotFoundViewResult("ProductNotFound");
 
             var model = _converterHelper.ToProductViewModel(product);
 
@@ -154,14 +154,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             var product = await _productRepository.GetByIdAsync(id.Value);
 
             if (product == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ProductNotFound");
             }
 
             return View(product);
@@ -175,6 +175,11 @@ namespace SuperShop.Controllers
             var product = await _productRepository.GetByIdAsync(id);
             await _productRepository.DeleteAsync(product);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ProductNotFound()
+        {
+            return View();
         }
     }
 }
