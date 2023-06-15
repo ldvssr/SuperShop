@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "mssql3": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:RubenAzureConnection"
+    },
+    "mssql2": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:NunoAzureConnection"
+    }
+  }
+}
