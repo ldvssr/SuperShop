@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App SuperShopCET77
+name: Build and deploy .NET Core application to Web App SuperShopAppService
 on:
   push:
     branches:
     - master
 env:
-  AZURE_WEBAPP_NAME: SuperShopCET77
+  AZURE_WEBAPP_NAME: SuperShopAppService
   AZURE_WEBAPP_PACKAGE_PATH: .\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.SuperShopCET77_E759 }}
+        publish-profile: ${{ secrets.SuperShopAppService_E179 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

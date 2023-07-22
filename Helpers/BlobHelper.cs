@@ -39,7 +39,7 @@ namespace SuperShop.Helpers
         private async Task<Guid> UploadStreamAsync(Stream stream, string containerName)
         {
             Guid name = Guid.NewGuid();
-            CloudBlobContainer container = _blobClient.GetContainerReference(containerName);
+            CloudBlobContainer container = _blobClient.GetContainerReference("images/"+containerName);
             CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{name}");
             await blockBlob.UploadFromStreamAsync(stream);
             return name;
