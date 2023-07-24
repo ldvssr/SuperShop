@@ -1,21 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SuperShop.Helpers
 {
     public class BlobHelper : IBlobHelper
     {
-        private readonly CloudBlobClient _blobClient;
+        private readonly BlobContainerClient _blobClient;
+        private readonly IConfiguration _configuration;
         public BlobHelper(IConfiguration configuration) 
         {
-            string keys = configuration["Blob:ConnectionString"];
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(keys);
-            _blobClient = storageAccount.CreateCloudBlobClient();
+            string keys = configuration["Blob:ConnectionString"]; 
+            _configuration = configuration;
         }
 
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
@@ -39,9 +38,16 @@ namespace SuperShop.Helpers
         private async Task<Guid> UploadStreamAsync(Stream stream, string containerName)
         {
             Guid name = Guid.NewGuid();
-            CloudBlobContainer container = _blobClient.GetContainerReference("images/"+containerName);
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{name}");
-            await blockBlob.UploadFromStreamAsync(stream);
+
+            var blobContainerClient =
+            new BlobContainerClient(
+                _configuration["Blob:ConnectionString"],
+                "images/" + containerName);          
+
+            var blobClient = blobContainerClient.GetBlobClient(name.ToString());
+
+            await blobClient.UploadAsync(stream);
+
             return name;
         }
     }
