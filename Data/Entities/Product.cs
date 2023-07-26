@@ -33,6 +33,6 @@ namespace SuperShop.Data.Entities
 
         public string ImageFullPath => ImageId == Guid.Empty
             ? "https://ca001.blob.core.windows.net/images/noimage.png"
-            : $"https://ca001.blob.core.windows.net/images/products/{ImageId}";
+            : $"https://ca001.blob.core.windows.net/images/{ImageId}";
     }
 }

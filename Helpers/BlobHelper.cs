@@ -13,8 +13,8 @@ namespace SuperShop.Helpers
         private readonly IConfiguration _configuration;
         public BlobHelper(IConfiguration configuration) 
         {
-            string keys = configuration["Blob:ConnectionString"]; 
             _configuration = configuration;
+            //string keys = configuration["Blob:ConnectionString"];            
         }
 
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
@@ -42,10 +42,8 @@ namespace SuperShop.Helpers
             var blobContainerClient =
             new BlobContainerClient(
                 _configuration["Blob:ConnectionString"],
-                "images/" + containerName);          
-
+                "images/products/" + containerName);
             var blobClient = blobContainerClient.GetBlobClient(name.ToString());
-
             await blobClient.UploadAsync(stream);
 
             return name;

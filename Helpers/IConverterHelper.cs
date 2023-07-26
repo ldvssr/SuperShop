@@ -7,7 +7,6 @@ namespace SuperShop.Helpers
     {
         Product ToProduct(Models.ProductViewModel productViewModel, Guid imageId, bool isNew);
 
-
         Models.ProductViewModel ToProductViewModel(Product product);
     }
 }
