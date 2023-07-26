@@ -26,7 +26,7 @@ namespace SuperShop.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var model = await _orderRepository.GetDetailsTempAsync(this.User.Identity.Name);
+            var model = await _orderRepository.GetDetailTempsAsync(this.User.Identity.Name);
             return View(model);
         }
 
@@ -37,6 +37,18 @@ namespace SuperShop.Controllers
                 Quantity = 1,
                 Products = _productRepository.GetComboProducts()
             };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(AddItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _orderRepository.AddItemToOrderAsync(model, this.User.Identity.Name);
+                return RedirectToAction("Create");
+            }
 
             return View(model);
         }

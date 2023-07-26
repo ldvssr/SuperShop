@@ -47,17 +47,11 @@ namespace SuperShop
 
             services.AddScoped<IConverterHelper, ConverterHelper>();
 
-            //services.AddScoped<IImageHelper, ImageHelper>();
-
             services.AddScoped<IBlobHelper, BlobHelper>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<IOrderRepository, OrderRepository>();
-
-            //services.AddScoped<IRepository, Repository>();
-
-            //services.AddScoped<IRepository, MockRepository>();
 
             services.ConfigureApplicationCookie(options =>
             {
