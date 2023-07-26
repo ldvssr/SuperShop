@@ -30,7 +30,6 @@ namespace SuperShop.Data
                 .Include(p => p.Product)
                 .Where(o => o.User == user)
                 .OrderBy(o => o.Product.Name);
-
         }
 
         public async Task<IQueryable<Order>> GetOrderAsync(string userName)
@@ -94,10 +93,6 @@ namespace SuperShop.Data
 
             await _context.SaveChangesAsync();
         }
-
-
-
-
 
         public async Task ModifyOrderDetailTempQuantityAsync(int id, double quantity)
         {
