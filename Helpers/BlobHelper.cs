@@ -42,7 +42,7 @@ namespace SuperShop.Helpers
             var blobContainerClient =
             new BlobContainerClient(
                 _configuration["Blob:ConnectionString"],
-                "images/" + containerName);          
+                "images/products" + containerName);          
 
             var blobClient = blobContainerClient.GetBlobClient(name.ToString());
 
