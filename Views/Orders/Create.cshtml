@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<SuperShop.Data.Entities.OrderDetailTemp>
 
-@{
-    ViewData["Title"] = "Create";
-}
-
 <h2>Create</h2>
 
 <p>
@@ -98,8 +94,6 @@
 
             var id = 0;
 
-
-
             $("#btnConfirm").click(function(){
                 $("#confirmDialog").modal("show");
                 return false;
@@ -126,7 +120,7 @@
             });
 
             $("#btnYesDelete").click(function() {
-                window.location.href = "orders/DeleteItem/" + id;
+                window.location.href = "/Orders/DeleteItem/" + id;
             });
 
         });
