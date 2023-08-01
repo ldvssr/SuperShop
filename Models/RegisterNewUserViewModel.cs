@@ -5,7 +5,7 @@ namespace SuperShop.Models
     public class RegisterNewUserViewModel
     {
         [Required]
-        [Display(Name ="First Name")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]

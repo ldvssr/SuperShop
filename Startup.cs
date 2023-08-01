@@ -43,7 +43,7 @@ namespace SuperShop
 
             services.AddTransient<SeedDb>();
 
-            services.AddScoped<IUserHelper, UserHelper> ();
+            services.AddScoped<IUserHelper, UserHelper>();
 
             services.AddScoped<IConverterHelper, ConverterHelper>();
 
@@ -52,6 +52,8 @@ namespace SuperShop
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.ConfigureApplicationCookie(options =>
             {

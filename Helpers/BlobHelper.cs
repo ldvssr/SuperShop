@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace SuperShop.Helpers
 {
@@ -11,7 +11,7 @@ namespace SuperShop.Helpers
     {
         private readonly BlobContainerClient _blobClient;
         private readonly IConfiguration _configuration;
-        public BlobHelper(IConfiguration configuration) 
+        public BlobHelper(IConfiguration configuration)
         {
             _configuration = configuration;
             //string keys = configuration["Blob:ConnectionString"];            

@@ -3,18 +3,18 @@ using System.Threading.Tasks;
 
 namespace SuperShop.Data
 {
-    public interface IGenericRepository <T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
 
-        IQueryable<T> GetAll ();
+        IQueryable<T> GetAll();
 
         Task<T> GetByIdAsync(int id);
 
-        Task CreateAsync (T entity);
+        Task CreateAsync(T entity);
 
-        Task UpdateAsync (T entity);
+        Task UpdateAsync(T entity);
 
-        Task DeleteAsync (T entity);
+        Task DeleteAsync(T entity);
 
         Task<bool> ExistAsync(int id);
 

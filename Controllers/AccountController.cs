@@ -17,7 +17,7 @@ namespace SuperShop.Controllers
         }
         public IActionResult Login()
         {
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -32,7 +32,7 @@ namespace SuperShop.Controllers
                 var result = await _userHelper.LoginAsync(model);
                 if (result.Succeeded)
                 {
-                    if(this.Request.Query.Keys.Contains("ReturnUrl"))
+                    if (this.Request.Query.Keys.Contains("ReturnUrl"))
                     {
                         return Redirect(this.Request.Query["ReturnUrl"].First());
                     }
@@ -103,7 +103,7 @@ namespace SuperShop.Controllers
             if (user != null)
             {
                 model.FirstName = user.FirstName;
-                model.LastName = user.LastName;                
+                model.LastName = user.LastName;
             }
             return View(model);
         }

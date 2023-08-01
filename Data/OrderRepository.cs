@@ -1,12 +1,10 @@
-﻿using SuperShop.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SuperShop.Data.Entities;
 using SuperShop.Helpers;
+using SuperShop.Models;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SuperShop.Models;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using NuGet.Common;
-using System;
 
 namespace SuperShop.Data
 {
@@ -62,13 +60,13 @@ namespace SuperShop.Data
         public async Task AddItemToOrderAsync(AddItemViewModel model, string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
-            if(user == null)
+            if (user == null)
             {
                 return;
             }
 
             var product = await _context.Products.FindAsync(model.ProductId);
-            if(product == null)
+            if (product == null)
             {
                 return;
             }
@@ -77,7 +75,7 @@ namespace SuperShop.Data
                 .Where(odt => odt.User == user && odt.Product == product)
                 .FirstOrDefaultAsync();
 
-            if(orderDetailTemp == null)
+            if (orderDetailTemp == null)
             {
                 orderDetailTemp = new OrderDetailTemp
                 {
@@ -101,13 +99,13 @@ namespace SuperShop.Data
         public async Task ModifyOrderDetailTempQuantityAsync(int id, double quantity)
         {
             var orderDetailTemp = await _context.OrderDetailsTemp.FindAsync(id);
-            if(orderDetailTemp == null)
+            if (orderDetailTemp == null)
             {
                 return;
             }
 
             orderDetailTemp.Quantity += quantity;
-            if(orderDetailTemp.Quantity > 0)
+            if (orderDetailTemp.Quantity > 0)
             {
                 _context.OrderDetailsTemp.Update(orderDetailTemp);
                 await _context.SaveChangesAsync();
@@ -165,6 +163,24 @@ namespace SuperShop.Data
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task DeliverOrder(DeliveryViewModel model)
+        {
+            var order = await _context.Orders.FindAsync(model.Id);
+            if (order == null)
+            {
+                return;
+            }
+
+            order.DeliveryDate = model.DeliveryDate;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            return await _context.Orders.FindAsync(id);
         }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Editing;
 using Microsoft.EntityFrameworkCore;
 using SuperShop.Data;
-using SuperShop.Data.Entities;
 using SuperShop.Helpers;
 using SuperShop.Models;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,8 +21,8 @@ namespace SuperShop.Controllers
             IProductRepository productRepository,
             IUserHelper userHelper,
             IConverterHelper converterHelper,
-            IBlobHelper blobHelper            
-            )            
+            IBlobHelper blobHelper
+            )
         {
             _productRepository = productRepository;
             _userHelper = userHelper;
@@ -75,14 +72,14 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 Guid imageId = Guid.Empty;
-                
+
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
                 }
 
                 var product = _converterHelper.ToProduct(model, imageId, true);
-                               
+
                 product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
@@ -116,20 +113,20 @@ namespace SuperShop.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(ProductViewModel model)
         {
-            
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     Guid imageId = model.ImageId;
 
-                    if(model.ImageFile != null && model.ImageFile.Length > 0)
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                         imageId= await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
                     }
 
                     var product = _converterHelper.ToProduct(model, imageId, false);
-                                        
+
                     product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _productRepository.UpdateAsync(product);
 

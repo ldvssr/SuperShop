@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SuperShop.Data
 {
-    public interface IOrderRepository:IGenericRepository<Order>
+    public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<IQueryable<Order>> GetOrderAsync(string userName);
 
@@ -18,5 +18,9 @@ namespace SuperShop.Data
         Task DeleteDetailTempAsync(int id);
 
         Task<bool> ConfirmOrderAsync(string userName);
+
+        Task DeliverOrder(DeliveryViewModel model);
+
+        Task<Order> GetOrderAsync(int id);
     }
 }
