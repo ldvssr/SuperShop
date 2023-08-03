@@ -22,6 +22,7 @@ namespace SuperShop.Data
             var country = await this.GetCountryWithCitiesAsync(model.CountryId);
             if (country == null)
             {
+
                 return;
             }
 
@@ -30,7 +31,6 @@ namespace SuperShop.Data
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<int> DeleteCityAsync(City city)
         {
             var country = await _context.Countries
@@ -38,16 +38,19 @@ namespace SuperShop.Data
                 .FirstOrDefaultAsync();
             if (country == null)
             {
+
                 return 0;
             }
 
             _context.Cities.Remove(city);
             await _context.SaveChangesAsync();
+
             return country.Id;
         }
 
         public IQueryable GetCountriesWithCities()
         {
+
             return _context.Countries
                 .Include(c => c.Cities)
                 .OrderBy(c => c.Name);
@@ -55,12 +58,12 @@ namespace SuperShop.Data
 
         public async Task<Country> GetCountryWithCitiesAsync(int id)
         {
+
             return await _context.Countries
                 .Include(c => c.Cities)
                 .Where(c => c.Id == id)
                 .FirstOrDefaultAsync();
         }
-
 
         public async Task<int> UpdateCityAsync(City city)
         {
@@ -68,22 +71,25 @@ namespace SuperShop.Data
                 .Where(c => c.Cities.Any(ci => ci.Id == city.Id)).FirstOrDefaultAsync();
             if (country == null)
             {
+
                 return 0;
             }
 
             _context.Cities.Update(city);
             await _context.SaveChangesAsync();
+
             return country.Id;
         }
 
         public async Task<City> GetCityAsync(int id)
         {
+
             return await _context.Cities.FindAsync(id);
         }
 
-
         public async Task<Country> GetCountryAsync(City city)
         {
+
             return await _context.Countries
                 .Where(c => c.Cities.Any(ci => ci.Id == city.Id))
                 .FirstOrDefaultAsync();
@@ -126,7 +132,7 @@ namespace SuperShop.Data
                     Value = "0"
                 });
             }
-            
+
             return list;
         }
     }

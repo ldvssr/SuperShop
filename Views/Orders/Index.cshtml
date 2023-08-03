@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<SuperShop.Data.Entities.Order>
 
-<h1>Orders</h1>
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2>Orders</h2>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>

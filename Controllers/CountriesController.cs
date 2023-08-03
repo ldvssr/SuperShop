@@ -31,6 +31,7 @@ namespace SuperShop.Controllers
             }
 
             var countryId = await _countryRepository.DeleteCityAsync(city);
+
             return this.RedirectToAction($"Details", new { id = countryId });
         }
 
@@ -38,18 +39,19 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var city = await _countryRepository.GetCityAsync(id.Value);
             if (city == null)
             {
+
                 return NotFound();
             }
 
             return View(city);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> EditCity(City city)
@@ -59,7 +61,8 @@ namespace SuperShop.Controllers
                 var countryId = await _countryRepository.UpdateCityAsync(city);
                 if (countryId != 0)
                 {
-                    return this.RedirectToAction($"Details", new {id = countryId});
+
+                    return this.RedirectToAction($"Details", new { id = countryId });
                 }
             }
 
@@ -70,12 +73,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
+
                 return NotFound();
             }
 
@@ -89,6 +94,7 @@ namespace SuperShop.Controllers
             if (this.ModelState.IsValid)
             {
                 await _countryRepository.AddCityAsync(model);
+
                 return RedirectToAction("Details", new { id = model.CountryId });
             }
 
@@ -97,6 +103,7 @@ namespace SuperShop.Controllers
 
         public IActionResult Index()
         {
+
             return View(_countryRepository.GetCountriesWithCities());
         }
 
@@ -104,12 +111,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var country = await _countryRepository.GetCountryWithCitiesAsync(id.Value);
             if (country == null)
             {
+
                 return NotFound();
             }
 
@@ -118,6 +127,7 @@ namespace SuperShop.Controllers
 
         public IActionResult Create()
         {
+
             return View();
         }
 
@@ -128,6 +138,7 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 await _countryRepository.CreateAsync(country);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -138,12 +149,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
+
                 return NotFound();
             }
             return View(country);
@@ -156,6 +169,7 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 await _countryRepository.UpdateAsync(country);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -166,16 +180,19 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var country = await _countryRepository.GetByIdAsync(id.Value);
             if (country == null)
             {
+
                 return NotFound();
             }
 
             await _countryRepository.DeleteAsync(country);
+
             return RedirectToAction(nameof(Index));
         }
     }

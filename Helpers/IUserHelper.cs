@@ -7,7 +7,6 @@ namespace SuperShop.Helpers
 {
     public interface IUserHelper
     {
-
         Task<User> GetUserByEmailAsync(string email);
 
         Task<IdentityResult> AddUserAsync(User user, string password);
@@ -27,5 +26,11 @@ namespace SuperShop.Helpers
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
+
+        Task<string> GenerateEmailConfirmationTokenAsync(User user);
+
+        Task<IdentityResult> ConfirmEmailAsync(User user, string token);
+
+        Task<User> GetUserbyIdAsync(string userId);
     }
 }

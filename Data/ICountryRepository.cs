@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Common;
 using SuperShop.Data.Entities;
 using SuperShop.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace SuperShop.Data
 {

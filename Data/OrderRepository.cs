@@ -24,6 +24,7 @@ namespace SuperShop.Data
             var user = await _userHelper.GetUserByEmailAsync(userName);
             if (user == null)
             {
+
                 return null;
             }
 
@@ -38,11 +39,13 @@ namespace SuperShop.Data
             var user = await _userHelper.GetUserByEmailAsync(userName);
             if (user == null)
             {
+
                 return null;
             }
 
             if (await _userHelper.IsUserInRoleAsync(user, "Admin"))
             {
+
                 return _context.Orders
                     .Include(o => o.User)
                     .Include(o => o.Items)
@@ -62,12 +65,14 @@ namespace SuperShop.Data
             var user = await _userHelper.GetUserByEmailAsync(userName);
             if (user == null)
             {
+
                 return;
             }
 
             var product = await _context.Products.FindAsync(model.ProductId);
             if (product == null)
             {
+
                 return;
             }
 
@@ -101,6 +106,7 @@ namespace SuperShop.Data
             var orderDetailTemp = await _context.OrderDetailsTemp.FindAsync(id);
             if (orderDetailTemp == null)
             {
+
                 return;
             }
 
@@ -117,6 +123,7 @@ namespace SuperShop.Data
             var orderDetailTemp = await _context.OrderDetailsTemp.FindAsync(id);
             if (orderDetailTemp == null)
             {
+
                 return;
             }
 
@@ -129,6 +136,7 @@ namespace SuperShop.Data
             var user = await _userHelper.GetUserByEmailAsync(userName);
             if (user == null)
             {
+
                 return false;
             }
 
@@ -139,6 +147,7 @@ namespace SuperShop.Data
 
             if (orderTmps == null || orderTmps.Count == 0)
             {
+
                 return false;
             }
 
@@ -170,6 +179,7 @@ namespace SuperShop.Data
             var order = await _context.Orders.FindAsync(model.Id);
             if (order == null)
             {
+
                 return;
             }
 
@@ -180,6 +190,7 @@ namespace SuperShop.Data
 
         public async Task<Order> GetOrderAsync(int id)
         {
+
             return await _context.Orders.FindAsync(id);
         }
     }

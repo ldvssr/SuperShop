@@ -16,11 +16,13 @@ namespace SuperShop.Data
 
         public IEnumerable<Product> GetProducts()
         {
+
             return _context.Products.OrderBy(p => p.Name);
         }
 
         public Product GetProduct(int id)
         {
+
             return _context.Products.Find(id);
         }
 
@@ -41,11 +43,13 @@ namespace SuperShop.Data
 
         public async Task<bool> SaveAllAsync()
         {
+
             return await _context.SaveChangesAsync() > 0;
         }
 
         public bool ProductExists(int id)
         {
+
             return _context.Products.Any(p => p.Id == id);
         }
     }

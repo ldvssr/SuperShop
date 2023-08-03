@@ -5,7 +5,6 @@ namespace SuperShop.Data
 {
     public interface IGenericRepository<T> where T : class
     {
-
         IQueryable<T> GetAll();
 
         Task<T> GetByIdAsync(int id);
@@ -17,6 +16,5 @@ namespace SuperShop.Data
         Task DeleteAsync(T entity);
 
         Task<bool> ExistAsync(int id);
-
     }
 }

@@ -24,6 +24,7 @@ namespace SuperShop.Data
             products.Add(new Product { Id = 3, Name = "Três", Price = 30 });
             products.Add(new Product { Id = 4, Name = "Quatro", Price = 40 });
             products.Add(new Product { Id = 5, Name = "Cinco", Price = 50 });
+
             return products;
         }
 

@@ -8,6 +8,7 @@ namespace SuperShop.Helpers
     {
         public Product ToProduct(ProductViewModel model, Guid imageId, bool isNew)
         {
+
             return new Product
             {
                 Id = isNew ? 0 : model.Id,
@@ -24,6 +25,7 @@ namespace SuperShop.Helpers
 
         public ProductViewModel ToProductViewModel(Product product)
         {
+
             return new ProductViewModel
             {
                 Id = product.Id,

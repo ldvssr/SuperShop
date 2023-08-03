@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SuperShop.Data;
-using SuperShop.Data.Entities;
 using SuperShop.Helpers;
-using SuperShop.Migrations;
 using SuperShop.Models;
-using System.IdentityModel.Tokens.Jwt;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -19,24 +17,29 @@ namespace SuperShop.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
 
         public AccountController(
             IUserHelper userHelper,
+            IMailHelper mailHelper,
             IConfiguration configuration,
             ICountryRepository countryRepository)
         {
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
             _configuration = configuration;
             _countryRepository = countryRepository;
         }
+
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
 
@@ -56,12 +59,14 @@ namespace SuperShop.Controllers
                 }
             }
             this.ModelState.AddModelError(string.Empty, "Failed to login");
+
             return View(model);
         }
 
         public async Task<IActionResult> Logout()
         {
             await _userHelper.LogoutAsync();
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -102,25 +107,32 @@ namespace SuperShop.Controllers
                     if (result != IdentityResult.Success)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
+
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
+                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    string tokenLink = Url.Action("ConfirmEmail", "Account", new
                     {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
+                        userid = user.Id,
+                        token = myToken
+                    }, protocol: HttpContext.Request.Scheme);
 
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-                    if (result2.Succeeded)
+                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow you to login, " +
+                        $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+
+                    if (response.IsSuccess)
                     {
-                        return RedirectToAction("Index", "Home");
+                        ViewBag.Message = "The instructions to allow you to login, have been sent to you by email";
+
+                        return View(model);
                     }
 
                     ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
                 }
             }
+
             return View(model);
         }
 
@@ -182,11 +194,13 @@ namespace SuperShop.Controllers
                     }
                 }
             }
+
             return View(model);
         }
 
         public IActionResult ChangePassword()
         {
+
             return View();
         }
 
@@ -213,6 +227,7 @@ namespace SuperShop.Controllers
                     this.ModelState.AddModelError(string.Empty, "User not found.");
                 }
             }
+
             return this.View(model);
         }
 
@@ -258,8 +273,33 @@ namespace SuperShop.Controllers
             return BadRequest();
         }
 
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserbyIdAsync(userId);
+            if (user == null)
+            {
+
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
+
+            return View();
+        }
+
         public IActionResult NotAuthorized()
         {
+
             return View();
         }
 
@@ -268,6 +308,7 @@ namespace SuperShop.Controllers
         public async Task<JsonResult> GetCitiesAsync(int countryId)
         {
             var country = await _countryRepository.GetCountryWithCitiesAsync(countryId);
+
             return Json(country.Cities.OrderBy(c => c.Name));
         }
     }

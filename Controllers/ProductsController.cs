@@ -33,6 +33,7 @@ namespace SuperShop.Controllers
         // GET: Products
         public IActionResult Index()
         {
+
             return View(_productRepository.GetAll().OrderBy(p => p.Name));
         }
 
@@ -41,6 +42,7 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return new NotFoundViewResult("ProductNotFound");
             }
 
@@ -48,6 +50,7 @@ namespace SuperShop.Controllers
 
             if (product == null)
             {
+
                 return new NotFoundViewResult("ProductNotFound");
             }
 
@@ -59,6 +62,7 @@ namespace SuperShop.Controllers
         //[Authorize]
         public IActionResult Create()
         {
+
             return View();
         }
 
@@ -82,8 +86,10 @@ namespace SuperShop.Controllers
 
                 product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _productRepository.CreateAsync(product);
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 
@@ -135,6 +141,7 @@ namespace SuperShop.Controllers
                 {
                     if (!await _productRepository.ExistAsync(model.Id))
                     {
+
                         return NotFound();
                     }
                     else
@@ -142,8 +149,10 @@ namespace SuperShop.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 
@@ -153,6 +162,7 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return new NotFoundViewResult("ProductNotFound");
             }
 
@@ -160,6 +170,7 @@ namespace SuperShop.Controllers
 
             if (product == null)
             {
+
                 return new NotFoundViewResult("ProductNotFound");
             }
 
@@ -178,6 +189,7 @@ namespace SuperShop.Controllers
             {
                 //throw new Exception("Excepção de Teste");
                 await _productRepository.DeleteAsync(product);
+
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
@@ -195,6 +207,7 @@ namespace SuperShop.Controllers
 
         public IActionResult ProductNotFound()
         {
+
             return View();
         }
     }

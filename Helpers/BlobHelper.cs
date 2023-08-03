@@ -20,18 +20,21 @@ namespace SuperShop.Helpers
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
         {
             Stream stream = file.OpenReadStream();
+
             return await UploadStreamAsync(stream, containerName);
         }
 
         public async Task<Guid> UploadBlobAsync(byte[] file, string containerName)
         {
             MemoryStream stream = new MemoryStream();
+
             return await UploadStreamAsync(stream, containerName);
         }
 
         public async Task<Guid> UploadBlobAsync(string image, string containerName)
         {
             Stream stream = File.OpenRead(image);
+
             return await UploadStreamAsync(stream, containerName);
         }
 

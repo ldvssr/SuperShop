@@ -22,12 +22,14 @@ namespace SuperShop.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _orderRepository.GetOrderAsync(this.User.Identity.Name);
+
             return View(model);
         }
 
         public async Task<IActionResult> Create()
         {
             var model = await _orderRepository.GetDetailTempsAsync(this.User.Identity.Name);
+
             return View(model);
         }
 
@@ -48,6 +50,7 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 await _orderRepository.AddItemToOrderAsync(model, this.User.Identity.Name);
+
                 return RedirectToAction("Create");
             }
 
@@ -58,10 +61,12 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             await _orderRepository.DeleteDetailTempAsync(id.Value);
+
             return RedirectToAction("Create");
         }
 
@@ -73,6 +78,7 @@ namespace SuperShop.Controllers
             }
 
             await _orderRepository.ModifyOrderDetailTempQuantityAsync(id.Value, 1);
+
             return RedirectToAction("Create");
         }
 
@@ -80,10 +86,12 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             await _orderRepository.ModifyOrderDetailTempQuantityAsync(id.Value, -1);
+
             return RedirectToAction("Create");
         }
 
@@ -92,6 +100,7 @@ namespace SuperShop.Controllers
             var response = await _orderRepository.ConfirmOrderAsync(this.User.Identity.Name);
             if (response)
             {
+
                 return RedirectToAction("Index");
             }
 
@@ -102,12 +111,14 @@ namespace SuperShop.Controllers
         {
             if (id == null)
             {
+
                 return NotFound();
             }
 
             var order = await _orderRepository.GetOrderAsync(id.Value);
             if (order == null)
             {
+
                 return NotFound();
             }
 
@@ -126,6 +137,7 @@ namespace SuperShop.Controllers
             if (ModelState.IsValid)
             {
                 await _orderRepository.DeliverOrder(model);
+
                 return RedirectToAction("Index");
             }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-
 namespace SuperShop.Controllers
 {
     public class HomeController : Controller
@@ -15,11 +14,13 @@ namespace SuperShop.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+
             return View();
         }
     }

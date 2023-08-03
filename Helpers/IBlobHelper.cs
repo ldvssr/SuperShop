@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 
-
 namespace SuperShop.Helpers
 {
     public interface IBlobHelper

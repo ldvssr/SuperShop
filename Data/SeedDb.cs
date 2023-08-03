@@ -70,6 +70,8 @@ namespace SuperShop.Data
                 }
 
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
@@ -86,7 +88,6 @@ namespace SuperShop.Data
                 AddProduct("iPad Mini", user);
                 await _context.SaveChangesAsync();
             }
-
         }
 
         private void AddProduct(string name, User user)
