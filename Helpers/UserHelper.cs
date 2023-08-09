@@ -23,7 +23,6 @@ namespace SuperShop.Helpers
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
-
             return await _userManager.CreateAsync(user, password);
         }
 
@@ -34,7 +33,6 @@ namespace SuperShop.Helpers
 
         public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
         {
-
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
 
@@ -62,6 +60,11 @@ namespace SuperShop.Helpers
             return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
+        public async Task<string> GeneratePasswordResetTokenAsync(User user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
 
@@ -70,7 +73,6 @@ namespace SuperShop.Helpers
 
         public async Task<User> GetUserbyIdAsync(string userId)
         {
-
             return await _userManager.FindByIdAsync(userId);
         }
 
@@ -82,7 +84,6 @@ namespace SuperShop.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-
             return await _signInManager.PasswordSignInAsync(
                 model.Username,
                 model.Password,
@@ -96,15 +97,18 @@ namespace SuperShop.Helpers
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<IdentityResult> ResetPasswordAsync(User user, string token, string password)
+        {
+            return await _userManager.ResetPasswordAsync(user, token, password);
+        }
+
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
-
             return await _userManager.UpdateAsync(user);
         }
 
         public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
         {
-
             return await _signInManager.CheckPasswordSignInAsync(
                 user,
                 password,
